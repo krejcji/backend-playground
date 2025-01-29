@@ -2,8 +2,6 @@
 
 Project to learn basic concepts from backend development using ASP.NET, Entity Framework and MS SQL database.
 
-
-
 **Task list:**
 
 1. ✅ Learn the basics
@@ -20,11 +18,11 @@ Project to learn basic concepts from backend development using ASP.NET, Entity F
 
 4. ✅ Make a simple controller, model
 
-5. 🟩 Practice Code First database initialization
+5. ✅ Practice Code First database initialization
 
-6. Make service and repository for DB operations
+6. ✅ Make service and repository for DB operations
 
-7. Create new REST API endpoints to use the DB
+7. ✅ Create new REST API endpoints to use the DB
 
 8. ...
 
