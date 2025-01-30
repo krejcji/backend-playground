@@ -9,6 +9,7 @@ namespace BackendPlayground.Server.Services
         public void DeleteUser(User user);
         public void UpdateUser(User user);
         public User GetUser(int id);
+        public IEnumerable<User> GetUsersByName(string name);
     }
 
     public class UserService : IUserService
@@ -36,7 +37,13 @@ namespace BackendPlayground.Server.Services
         }
         public User GetUser(int id)
         {
-            var user = _repository.Get(u => u.Id == id);            
+            var user = _repository.GetFirst(u => u.Id == id);            
+            return user;
+        }
+
+        public IEnumerable<User> GetUsersByName(string name)
+        {
+            var user = _repository.GetByName(name);
             return user;
         }
     }

@@ -9,12 +9,13 @@ namespace BackendPlayground.Server.Repositories
         void Add(T entity);
         void Update(T entity);
         void Delete(T entity);
-        T Get(Expression<Func<T, bool>> where);
+        T GetFirst(Expression<Func<T, bool>> where);
+        IEnumerable<T> Get(Expression<Func<T, bool>> where);
     }
 
     public interface IUserRepository : IRepository<User>
     {
-        public User GetByName(string name);
+        public IEnumerable<User> GetByName(string name);
     }
 
     public class Repository<T> : IRepository<T> where T : class
@@ -42,11 +43,17 @@ namespace BackendPlayground.Server.Repositories
             if (entry.State == EntityState.Detached)
                 dbSet.Attach(entity);
             dbSet.Remove(entity);
+            dbContext.SaveChanges();
         }
 
-        public virtual T Get(Expression<Func<T, bool>> where)
+        public virtual T GetFirst(Expression<Func<T, bool>> where)
         {
             return dbSet.Where(where).FirstOrDefault();
+        }
+
+        public virtual IEnumerable<T> Get(Expression<Func<T, bool>> where)
+        {
+            return dbSet.Where(where).AsEnumerable();
         }
 
         public virtual void Update(T entity)
@@ -55,6 +62,7 @@ namespace BackendPlayground.Server.Repositories
             if (entry.State == EntityState.Detached)
                 dbSet.Attach(entity);
             entry.State = EntityState.Modified;
+            dbContext.SaveChanges();
         }
     }
     public class UserRepository : Repository<User>, IUserRepository
@@ -62,7 +70,7 @@ namespace BackendPlayground.Server.Repositories
         public UserRepository(UserDbContext dbContext) : base(dbContext)
         { }
 
-        public User GetByName(string name)
+        public IEnumerable<User> GetByName(string name)
         {
             var lowerName = name.ToLower();
             return Get(u => u.UserName.ToLower().Contains(lowerName));

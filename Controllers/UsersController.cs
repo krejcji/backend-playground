@@ -20,8 +20,15 @@ namespace BackendPlayground.Server.Controllers
         {
             var user = _userService.GetUser(id);
             if (user == null)
-                return NotFound(new { id = id, error = $"User with id {id} not found."});
+                return NotFound(new { id = id, error = $"User with id: {id} not found."});
             return Ok(user);
+        }
+
+        [HttpGet("{name}")]
+        public IActionResult SearchUserByName(string name)
+        {
+            var users = _userService.GetUsersByName(name);
+            return Ok(users);
         }
 
         [HttpPost]
@@ -55,6 +62,47 @@ namespace BackendPlayground.Server.Controllers
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status501NotImplemented);
+            }
+        }
+
+        [HttpPut]
+        public IActionResult UpdateUser([FromBody] User input)
+        {
+            if (input == null)
+                return BadRequest("User data is null.");
+
+            if (input.Id == 0)
+                return BadRequest("UserId not specified.");
+
+            try
+            {
+                _userService.UpdateUser(input);
+                return CreatedAtAction(nameof(UpdateUser), input);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpDelete]
+        public IActionResult DeleteUser([FromQuery] int id)
+        {
+            if (id == 0)                
+                return BadRequest("Invalid UsedId.");
+
+            try
+            {
+                User user = _userService.GetUser(id);
+                if (user == null)
+                    return NotFound(new { id = id, error = $"User with id: {id} not found." });
+
+                _userService.DeleteUser(user);
+                return Ok(new {message = $"User with id: {id} deleted successfully."});
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
     }
