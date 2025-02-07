@@ -24,10 +24,12 @@ Project to learn basic concepts from backend development using ASP.NET, Entity F
 
 7. ✅ Create new REST API endpoints to use the DB
 
-8. ...
+8. ✅ Unit tests with Xunit and Moq (elementary - there is no logic to test yet)
 
-9. Unit tests
+9. ...
 
 10. Authorization
 
 11. CI/CD
+
+12. Integration testing
